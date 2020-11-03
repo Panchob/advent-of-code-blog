@@ -1,9 +1,15 @@
 import React, { Component } from 'react';
 import { LangConsumer, LangProvider } from '../contexts/LangContexts'
-import '../style/App.css';
+import { days_info } from '../data/days_info'
+import { Day } from '../components/Day'
+
 
 
 export default class App extends Component {
+
+  state = {
+    days: []
+  }
 
 
   mainTitle(lang) {
@@ -35,23 +41,38 @@ export default class App extends Component {
     }
   }
 
+  days_init() {
+    const days = []
+    for (const d of days_info) {
+      days.push(
+        <Day text={d}></Day>
+      )
+    }
 
-  
+    return days;
+  }
+
+
+  componentDidMount() {
+    this.setState({ days: this.days_init() })
+
+  }
+
   render() {
     return (
       <LangProvider>
-        <div className="App">
+        <div>
           <LangConsumer>
             {({lang}) => 
             <div>
               <h1>{this.mainTitle(lang)}</h1>
               <p>{this.mainDescription(lang)}</p>
-              
             </div>}
           </LangConsumer>
           <LangConsumer>
             {({toggleLang}) => <button onClick={() => toggleLang()}>TEST</button>}
           </LangConsumer>
+          {this.state.days}
         </div>
       </LangProvider>
 
